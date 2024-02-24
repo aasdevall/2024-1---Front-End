@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrada... Processamento e Saída</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+    button {
+        padding: 8px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    #output {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+</style>
+</head>
+<body>
+<h2>Tela de Entrada</h2>
+<form id="inputForm">
+    <label for="descricao">Descrição do Produto:</label>
+    <input type="text" id="descricao" required>
+    <label for="saldo">Saldo em estoque:</label>
+    <input type="text" id="saldo" required>
+    <label for="valorUnitario">Valor unitário do estoque (custo):</label>
+    <input type="text" id="valorUnitario" required>
+    <label for="qtdeCompra">Qtde compra:</label>
+    <input type="text" id="qtdeCompra" required>
+    <label for="valorUnitarioCompra">Valor unitário compra (custo):</label>
+    <input type="text" id="valorUnitarioCompra" required>
+    <label for="indiceLucro">Índice de lucro (%):</label>
+    <input type="text" id="indiceLucro" required>
+    <button type="submit">Processar</button>
+</form>
+
+<div id="output"></div>
+
+<script>
+document.getElementById('inputForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Entrada de dados
+    const descricao = document.getElementById('descricao').value;
+    const saldo = parseFloat(document.getElementById('saldo').value);
+    const valorUnitario = parseFloat(document.getElementById('valorUnitario').value);
+    const qtdeCompra = parseFloat(document.getElementById('qtdeCompra').value);
+    const valorUnitarioCompra = parseFloat(document.getElementById('valorUnitarioCompra').value);
+    const indiceLucro = parseFloat(document.getElementById('indiceLucro').value);
+
+    // Processamento
+    const custoMedioUnitario = ((saldo * valorUnitario) + (qtdeCompra * valorUnitarioCompra)) / (saldo + qtdeCompra);
+    const valorVenda = custoMedioUnitario * (1 + (indiceLucro / 100));
+    const valorTotalEstoque = saldo * valorUnitario;
+
+    // Saída
+    const outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = `
+        <h2>Dados de Entrada:</h2>
+        <p><strong>Descrição do Produto:</strong> ${descricao}</p>
+        <p><strong>Saldo em estoque:</strong> ${saldo}</p>
+        <p><strong>Valor unitário do estoque (custo):</strong> R$ ${valorUnitario.toFixed(2)}</p>
+        <p><strong>Qtde compra:</strong> ${qtdeCompra}</p>
+        <p><strong>Valor unitário compra (custo):</strong> R$ ${valorUnitarioCompra.toFixed(2)}</p>
+        <p><strong>Índice de lucro:</strong> ${indiceLucro}%</p>
+        <h2>Dados Processados:</h2>
+        <p><strong>Custo Médio Unitário:</strong> R$ ${custoMedioUnitario.toFixed(2)}</p>
+        <p><strong>Valor de Venda:</strong> R$ ${valorVenda.toFixed(2)}</p>
+        <p><strong>Valor Total do Estoque:</strong> R$ ${valorTotalEstoque.toFixed(2)}</p>
+    `;
+});
+</script>
+</body>
+</html>
